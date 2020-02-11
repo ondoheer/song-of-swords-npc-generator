@@ -7,13 +7,21 @@ from modules.tables import campaign_power, races_table, pcp_investment, attribut
 class Character():
 
     _str = 1
-    agi = 1
-    end = 1
-    hlt = 1
-    wil = 1
-    wit = 1
-    per = 1
+    _agi = 1
+    _end = 1
+    _hlt = 1
+    _wil = 1
+    _wit = 1
+    _per = 1
     _int = 1
+    _str_mod = 0
+    _agi_mod = 0
+    _end_mod = 0
+    _hlt_mod = 0
+    _wil_mod = 0
+    _wit_mod = 0
+    _per_mod = 0
+    _int_mod = 0
 
     def __init__(self, race="human"):
         self.race = race
@@ -37,12 +45,12 @@ class Character():
         return f"""
         -- ATRIBUTES
         STR: {self._str}
-        AGI: {self.agi}
-        END: {self.end}
-        HLT: {self.hlt}
-        WIL: {self.wil}
-        WIT: {self.wit}
-        PER: {self.per}
+        AGI: {self._agi}
+        END: {self._end}
+        HLT: {self._hlt}
+        WIL: {self._wil}
+        WIT: {self._wit}
+        PER: {self._per}
         INT: {self._int}
         AVALIABLE ATTR PCP: {self.avaliable_attr_pts}
         -- COMPOUND
@@ -71,19 +79,19 @@ class Character():
 
     @property
     def adr(self):
-        return (self.agi + self.wit) // 2
+        return (self._agi + self._wit) // 2
 
     @property
     def mob(self):
-        return (self._str + self.agi + self.end) // 2
+        return (self._str + self._agi + self._end) // 2
 
     @property
     def car(self):
-        return (self._str + self.end) // 2
+        return (self._str + self._end) // 2
 
     @property
     def cha(self):
-        return (self.wil + self.wit + self.per) // 2
+        return (self._wil + self._wit + self._per) // 2
 
     @property
     def tou(self):
@@ -97,7 +105,7 @@ class Character():
     @property
     def grit(self):
         # TODO
-        return self.wil // 2
+        return self._wil // 2
 
     def set_campaign_power(self, power=None):
         """
@@ -222,12 +230,12 @@ class Character():
     def spend_attr(self):
         return sum([
             self._str,
-            self.agi,
-            self.end,
-            self.hlt,
-            self.wil,
-            self.wit,
-            self.per,
+            self._agi,
+            self._end,
+            self._hlt,
+            self._wil,
+            self._wit,
+            self._per,
             self._int
         ]) - 8  # basic 1
 
@@ -238,12 +246,12 @@ class Character():
     def set_random_attr(self):
         attrs = [
             "_str",
-            "agi",
-            "end",
-            "hlt",
-            "wil",
-            "wit",
-            "per",
+            "_agi",
+            "_end",
+            "_hlt",
+            "_wil",
+            "_wit",
+            "_per",
             "_int"
         ]
         rand_attr = random.choice(attrs)
@@ -274,22 +282,26 @@ class Character():
         if self.avaliable_attr_pts:
             self._str = self.process_attr_cost(random.randint(1, 5))
         if self.avaliable_attr_pts:
-            self.agi = self.process_attr_cost(random.randint(1, 5))
+            self._agi = self.process_attr_cost(random.randint(1, 5))
         if self.avaliable_attr_pts:
-            self.end = self.process_attr_cost(random.randint(1, 5))
+            self._end = self.process_attr_cost(random.randint(1, 5))
         if self.avaliable_attr_pts:
-            self.hlt = self.process_attr_cost(random.randint(1, 5))
+            self._hlt = self.process_attr_cost(random.randint(1, 5))
         if self.avaliable_attr_pts:
-            self.wil = self.process_attr_cost(random.randint(1, 5))
+            self._wil = self.process_attr_cost(random.randint(1, 5))
         if self.avaliable_attr_pts:
-            self.wit = self.process_attr_cost(random.randint(1, 5))
+            self._wit = self.process_attr_cost(random.randint(1, 5))
         if self.avaliable_attr_pts:
-            self.per = self.process_attr_cost(random.randint(1, 5))
+            self._per = self.process_attr_cost(random.randint(1, 5))
         if self.avaliable_attr_pts:
             self._int = self.process_attr_cost(random.randint(1, 5))
 
         while self.avaliable_attr_pts > 0:
             self.set_random_attr()
+
+    def process_race_attrs(self):
+        if self.race == "dwarf":
+            pass
 
     def build_npc(self):
         self.allocate_pcp()
