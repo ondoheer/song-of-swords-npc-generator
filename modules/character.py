@@ -1,7 +1,7 @@
 import random
 
 from modules.randomizers import power_randomizer
-from modules.tables import campaign_power, races_table, pcp_investment
+from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs
 
 
 class Character():
@@ -24,10 +24,13 @@ class Character():
         self.max = None
         self.race_pcp = 0
         self.attributes_pcp = 0
+        self.attributes_points = 0
         self.skill_pcp = 0
         self.spp_pcp = 0
         self.wealth_pcp = 0
         self.boones_banes_pcp = 0
+
+        # attribute points to spend
 
     def __str__(self):
 
@@ -41,6 +44,7 @@ class Character():
         WIT: {self.wit}
         PER: {self.per}
         INT: {self._int}
+        AVALIABLE ATTR PCP: {self.avaliable_attr_pts}
         -- COMPOUND
         ADR: {self.adr}
         MOB: {self.mob}
@@ -60,6 +64,7 @@ class Character():
         spend skills: {self.skill_pcp}
         spend spp: {self.spp_pcp}
         spend wealth: {self.wealth_pcp}
+
 
 
         """
@@ -197,9 +202,9 @@ class Character():
             else:
                 self.wealth_pcp = self.avaliable_pcp + self.wealth_pcp
 
-    def build_npc(self, power=None):
+    def allocate_pcp(self, power=None):
         """
-        Creates a character
+        allocates PCP
         """
         self.set_campaign_power(power=None)
         self.set_basic_pcps()
@@ -211,6 +216,62 @@ class Character():
         self.set_wealth_pcp()
 
         while self.avaliable_pcp > 0:
-            print(self.avaliable_pcp)
+
             self.spend_remaining_pcp()
-            print(self.avaliable_pcp)
+
+    def spend_attr(self):
+        return sum([
+            self._str,
+            self.agi,
+            self.end,
+            self.hlt,
+            self.wil,
+            self.wit,
+            self.per,
+            self._int
+        ]) - 8  # basic 1
+
+    @property
+    def avaliable_attr_pts(self):
+        return self.attributes_points - self.spend_attr()
+
+    def process_attr_cost(self, value):
+        """
+        checks if the random generated value exists in the table, otherwise generates another
+        """
+        try:
+            attr = attribute_costs[value]
+            return attr
+        except KeyError:
+            self.process_attr_cost(value - 1)
+
+    def allocate_attributes(self):
+
+        self.attributes_points = pcp_investment["attribute"][self.attributes_pcp]
+
+        # first random values 2 to 4
+        # then spend the rest randomly
+
+        # give all stats a basic random stat up to avg
+        if self.avaliable_attr_pts:
+            self._str = self.process_attr_cost(random.randint(1, 5))
+
+        if self.avaliable_attr_pts:
+            self.agi = self.process_attr_cost(random.randint(1, 5))
+        if self.avaliable_attr_pts:
+            self.end = self.process_attr_cost(random.randint(1, 5))
+        if self.avaliable_attr_pts:
+            self.hlt = self.process_attr_cost(random.randint(1, 5))
+        if self.avaliable_attr_pts:
+            self.wil = self.process_attr_cost(random.randint(1, 5))
+        if self.avaliable_attr_pts:
+            self.wit = self.process_attr_cost(random.randint(1, 5))
+        if self.avaliable_attr_pts:
+            self.per = self.process_attr_cost(random.randint(1, 5))
+        if self.avaliable_attr_pts:
+            self._int = self.process_attr_cost(random.randint(1, 5))
+        print(self.spend_attr())
+
+    def build_npc(self):
+        self.allocate_pcp()
+        self.allocate_attributes()
