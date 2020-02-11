@@ -235,6 +235,24 @@ class Character():
     def avaliable_attr_pts(self):
         return self.attributes_points - self.spend_attr()
 
+    def set_random_attr(self):
+        attrs = [
+            "_str",
+            "agi",
+            "end",
+            "hlt",
+            "wil",
+            "wit",
+            "per",
+            "_int"
+        ]
+        rand_attr = random.choice(attrs)
+        curr_val = self.__getattribute__(rand_attr)
+        if curr_val > 7:  # mas starting lvl
+            self.set_random_attr()
+        else:
+            self.__setattr__(rand_attr, curr_val + 1)
+
     def process_attr_cost(self, value):
         """
         checks if the random generated value exists in the table, otherwise generates another
@@ -255,7 +273,6 @@ class Character():
         # give all stats a basic random stat up to avg
         if self.avaliable_attr_pts:
             self._str = self.process_attr_cost(random.randint(1, 5))
-
         if self.avaliable_attr_pts:
             self.agi = self.process_attr_cost(random.randint(1, 5))
         if self.avaliable_attr_pts:
@@ -270,7 +287,9 @@ class Character():
             self.per = self.process_attr_cost(random.randint(1, 5))
         if self.avaliable_attr_pts:
             self._int = self.process_attr_cost(random.randint(1, 5))
-        print(self.spend_attr())
+
+        while self.avaliable_attr_pts > 0:
+            self.set_random_attr()
 
     def build_npc(self):
         self.allocate_pcp()
