@@ -1,7 +1,6 @@
 import random
-
 from modules.randomizers import power_randomizer
-from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs
+from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs, boones_cost_full, banes_cost_full
 
 
 class Character():
@@ -39,13 +38,16 @@ class Character():
         self.max = None
         self.race_pcp = 0
         self.attributes_pcp = 0
+        # attribute points to spend
         self.attributes_points = 0
         self.skill_pcp = 0
         self.spp_pcp = 0
         self.wealth_pcp = 0
         self.boones_banes_pcp = 0
-
-        # attribute points to spend
+        # boones n banes points to spend
+        self.boones_banes_points = 0
+        self.boones = []
+        self.banes = []
 
     def __str__(self):
 
@@ -82,7 +84,11 @@ class Character():
         spend skills: {self.skill_pcp}
         spend spp: {self.spp_pcp}
         spend wealth: {self.wealth_pcp}
-
+        -- BOONES AND BANES
+        PCP: {self.boones_banes_pcp}
+        POINTS: {self.boones_banes_points}
+        BOONES: {self.boones}
+        BANES: {self.banes}
 
 
         """
@@ -322,7 +328,7 @@ class Character():
 
         # first give 2 to each,
         # since the lowest attr_pcp is 22
-        # this will leave at least 8 to 
+        # this will leave at least 8 to
         # spend the rest randomly
 
         # give all stats a basic random stat up to 2
@@ -339,13 +345,64 @@ class Character():
             self.set_random_attr()
 
     def process_race_attrs(self):
+        """
+        Adds the racial modifiers,
+        so far it only takes into account the
+        dwarves
+        """
         if self.race == "dwarf":
             self._mob_mod = -1
             self._tou_mod = 1
             self._end_mod = 2
             self._hlt_mod = 1
 
+    def filter_boones_or_banes_by_value(self, value, _type):
+        """
+        value: max cost of the boon or banes
+        type: "boon" or "bane" to choose the right table to filter
+        """
+
+        if _type == "boon":
+            table = boones_cost_full
+        elif _type == "bane":
+            table = banes_cost_full
+
+        # we convert the boones_banes_points to abs value so we can filter them when they have a negative value
+        return {k: v for k, v in table.items() if v <= abs(self.boones_banes_points)}
+
+    def assign_banes(self, banes_list):
+        """
+        if boones and banes points have a negative value
+        select banes to compensate it to 0
+        """
+        if self.boones_banes_points < 0:
+            bane_name = random.choice(list(banes_list.keys()))
+            # this should get the bane explanation as well
+            self.banes.append(bane_name)
+            self.boones_banes_points += banes_list[bane_name]
+
+    def allocate_boones_banes(self):
+        """
+        buy boones and banes
+        1. check if points have a negative value
+        1.1 if negative, buy banes until it reaches positive value (select only banes that sum up to that value)
+        2. 50% chance to want a boon
+        2.1 select boon, repeat 2
+        3. repeat 1
+        """
+        self.boones_banes_points = pcp_investment["boones_banes"][self.boones_banes_pcp]
+
+        while self.boones_banes_points < 0:
+            # filter banes to choose from
+            banes = self.filter_boones_or_banes_by_value(
+                self.boones_banes_points, "bane")
+            self.assign_banes(banes)
+
     def build_npc(self):
+        """
+        Create a new NPC following the CC process
+        """
         self.allocate_pcp()
         self.allocate_attributes()
         self.process_race_attrs()
+        self.allocate_boones_banes()
