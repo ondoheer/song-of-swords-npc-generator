@@ -22,6 +22,13 @@ class Character():
     _wit_mod = 0
     _per_mod = 0
     _int_mod = 0
+    _tou_mod = 0
+    _grit_mod = 0
+    _adr_mod = 0
+    _cha_mod = 0
+    _mob_mod = 0
+    _sdb_mod = 0
+    _car_mod = 0
 
     def __init__(self, race="human"):
         self.race = race
@@ -111,33 +118,33 @@ class Character():
 
     @property
     def adr(self):
-        return (self._agi + self._wit) // 2
+        return (self._agi + self._wit) // 2 + self._adr_mod
 
     @property
     def mob(self):
-        return (self._str + self._agi + self._end) // 2
+        return (self._str + self._agi + self._end) // 2 + self._mob_mod
 
     @property
     def car(self):
-        return (self._str + self._end) // 2
+        return (self._str + self._end) // 2 + self._car_mod
 
     @property
     def cha(self):
-        return (self._wil + self._wit + self._per) // 2
+        return (self._wil + self._wit + self._per) // 2 + self._cha_mod
 
     @property
     def tou(self):
         # TODO
-        return 4
+        return 4 + self._tou_mod
 
     @property
     def sdb(self):
-        return self._str//2
+        return self._str//2 + self._sdb_mod
 
     @property
     def grit(self):
         # TODO
-        return self._wil // 2
+        return self._wil // 2 + self._grit_mod
 
     def set_campaign_power(self, power=None):
         """
