@@ -269,7 +269,7 @@ class Character():
 
             self.spend_remaining_pcp()
 
-    def spend_attr(self):
+    def spent_attr(self):
         return sum([
             self._str,
             self._agi,
@@ -283,9 +283,12 @@ class Character():
 
     @property
     def avaliable_attr_pts(self):
-        return self.attributes_points - self.spend_attr()
+        return self.attributes_points - self.spent_attr()
 
     def set_random_attr(self):
+        """
+        adds +1 to a random attr
+        """
         attrs = [
             "_str",
             "_agi",
@@ -298,14 +301,14 @@ class Character():
         ]
         rand_attr = random.choice(attrs)
         curr_val = self.__getattribute__(rand_attr)
-        if curr_val > 7:  # mas starting lvl
+        if curr_val > 7:  # max starting lvl is 8, so search for another attr
             self.set_random_attr()
         else:
             self.__setattr__(rand_attr, curr_val + 1)
 
     def process_attr_cost(self, value):
         """
-        checks if the random generated value exists in the table, otherwise generates another
+        checks if the random generated value exists in the table, otherwise generates another. from 0 to 10 all values exist
         """
         try:
             attr = attribute_costs[value]
@@ -317,26 +320,20 @@ class Character():
 
         self.attributes_points = pcp_investment["attribute"][self.attributes_pcp]
 
-        # first random values 2 to 4
-        # then spend the rest randomly
+        # first give 2 to each,
+        # since the lowest attr_pcp is 22
+        # this will leave at least 8 to 
+        # spend the rest randomly
 
-        # give all stats a basic random stat up to avg
-        if self.avaliable_attr_pts:
-            self._str = self.process_attr_cost(random.randint(1, 5))
-        if self.avaliable_attr_pts:
-            self._agi = self.process_attr_cost(random.randint(1, 5))
-        if self.avaliable_attr_pts:
-            self._end = self.process_attr_cost(random.randint(1, 5))
-        if self.avaliable_attr_pts:
-            self._hlt = self.process_attr_cost(random.randint(1, 5))
-        if self.avaliable_attr_pts:
-            self._wil = self.process_attr_cost(random.randint(1, 5))
-        if self.avaliable_attr_pts:
-            self._wit = self.process_attr_cost(random.randint(1, 5))
-        if self.avaliable_attr_pts:
-            self._per = self.process_attr_cost(random.randint(1, 5))
-        if self.avaliable_attr_pts:
-            self._int = self.process_attr_cost(random.randint(1, 5))
+        # give all stats a basic random stat up to 2
+        self._str = 2
+        self._agi = 2
+        self._end = 2
+        self._hlt = 2
+        self._wit = 2
+        self._wil = 2
+        self._per = 2
+        self._int = 2
 
         while self.avaliable_attr_pts > 0:
             self.set_random_attr()
