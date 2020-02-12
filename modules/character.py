@@ -50,24 +50,27 @@ class Character():
     def __str__(self):
 
         return f"""
+        -- RACIAL
+        Race: {self.race}
+
         -- ATRIBUTES
-        STR: {self.str}
-        AGI: {self.agi}
-        END: {self.end}
-        HLT: {self.hlt}
-        WIL: {self.wil}
-        WIT: {self.wit}
-        PER: {self.per}
-        INT: {self.int}
+        STR: {self.str} = {self._str} + {self._str_mod}
+        AGI: {self.agi} = {self._agi} + {self._agi_mod}
+        END: {self.end} = {self._end} + {self._end_mod}
+        HLT: {self.hlt} = {self._hlt} + {self._hlt_mod}
+        WIL: {self.wil} = {self._wil} + {self._wil_mod}
+        WIT: {self.wit} = {self._wit} + {self._wit_mod}
+        PER: {self.per} = {self._per} + {self._per_mod}
+        INT: {self.int} = {self._int} + {self._int_mod}
         AVALIABLE ATTR PCP: {self.avaliable_attr_pts}
         -- COMPOUND
-        ADR: {self.adr}
-        MOB: {self.mob}
-        CAR: {self.car}
-        CHA: {self.cha}
-        TOU: {self.tou}
-        SDB: {self.sdb}
-        GRIT: {self.grit}
+        ADR: {self.adr} mod =  {self._adr_mod}
+        MOB: {self.mob} mod =   {self._mob_mod}
+        CAR: {self.car} mod =   {self._car_mod}
+        CHA: {self.cha} mod =   {self._cha_mod}
+        TOU: {self.tou} mod =   {self._tou_mod}
+        SDB: {self.sdb} mod =   {self._sdb_mod}
+        GRIT: {self.grit} mod =  {self._grit_mod}
         -- CAMPAIGN POWER
         Power: {self.power}
         PCP: {self.pcp}
@@ -340,8 +343,12 @@ class Character():
 
     def process_race_attrs(self):
         if self.race == "dwarf":
-            pass
+            self._mob_mod = -1
+            self._tou_mod = 1
+            self._end_mod = 2
+            self._hlt_mod = 1
 
     def build_npc(self):
         self.allocate_pcp()
         self.allocate_attributes()
+        self.process_race_attrs()
