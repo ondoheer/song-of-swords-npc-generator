@@ -44,14 +44,14 @@ class Character():
 
         return f"""
         -- ATRIBUTES
-        STR: {self._str}
-        AGI: {self._agi}
-        END: {self._end}
-        HLT: {self._hlt}
-        WIL: {self._wil}
-        WIT: {self._wit}
-        PER: {self._per}
-        INT: {self._int}
+        STR: {self.str}
+        AGI: {self.agi}
+        END: {self.end}
+        HLT: {self.hlt}
+        WIL: {self.wil}
+        WIT: {self.wit}
+        PER: {self.per}
+        INT: {self.int}
         AVALIABLE ATTR PCP: {self.avaliable_attr_pts}
         -- COMPOUND
         ADR: {self.adr}
@@ -76,6 +76,38 @@ class Character():
 
 
         """
+
+    @property
+    def str(self):
+        return self._str + self._str_mod
+
+    @property
+    def agi(self):
+        return self._agi + self._agi_mod
+
+    @property
+    def end(self):
+        return self._end + self._end_mod
+
+    @property
+    def hlt(self):
+        return self._hlt + self._hlt_mod
+
+    @property
+    def wil(self):
+        return self._wil + self._wil_mod
+
+    @property
+    def wit(self):
+        return self._wit + self._wit_mod
+
+    @property
+    def per(self):
+        return self._per + self._per_mod
+
+    @property
+    def int(self):
+        return self._int + self._int_mod
 
     @property
     def adr(self):
