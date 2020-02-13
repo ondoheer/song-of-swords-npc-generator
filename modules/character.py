@@ -441,12 +441,24 @@ class Character():
             if self.boones_banes_points == 0:
                 break
         # randomly flavour more boones and banes
-        if self.boones_banes_points == 0:
+        # TODO this isn't working and if it adds boones then it ends up adding much more banes
+        # I'm to lazy to check why
+        """if self.boones_banes_points == 0:
             choose_new_boon = random.choice([True, False])
             if choose_new_boon:
                 self.choose_boon_or_bane("boon")
                 self.allocate_boones_banes()
-
+        """
+    
+    def allocate_skills(self):
+        """
+        this will process based on pre made profiles
+        like "bandit", "knight", etc
+        They will be like the packets but more complex
+        and will add extra points for not choosing the packets
+        adequately
+        """
+        pass
     def build_npc(self):
         """
         Create a new NPC following the CC process

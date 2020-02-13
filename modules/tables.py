@@ -271,3 +271,101 @@ banes_cost_full = {
     "wanted-10": 10,
     "wanted-15": 15,
 }
+
+
+skills = {
+    1: "athletics",
+    2: "chemistry",
+    3: "climbing",
+    4: "cooking",
+    5: "crafting",
+    6: "drill",
+    7: "engineering",
+    8: "gathering information",
+    9: "history",
+    10: "hunting",
+    11: "intimidation",
+    12: "knowledge",
+    13: "navigation",
+    14: "observation",
+    15: "oration",
+    16: "performance",
+    17: "persuasion",
+    18: "profession",
+    19: "research",
+    20: "riding",
+    21: "sailing",
+    22: "stealth",
+    23: "strategy",
+    24: "subterfuge",
+    25: "surgery",
+    26: "swimming",
+    27: "tactics",
+    28: "thievery"
+}
+lifestyles = {
+    "academic": {
+        "skills":{
+
+            "basic":[2,7,12, 19 ],
+            "other": [3,4,5,7,8,9,11,13,14,15,16,17,20,25,26]
+        },
+        "schools":[]
+    },
+    "criminal":{
+        "skills":{
+
+            "basic": [8,11,12,14],
+            "other":[1,3,10,11,13,20,22,24,28]
+        },
+        "schools":[]
+    },
+    "civilian":{
+        "skills":{
+
+            "basic":[4,5,18,20,14],
+            "other":[1,3,10,12,13,26]
+        },
+        "schools":[]
+    },
+    "military":{
+        "skills":{
+
+            "basic":[1,6,11,13,14,20,23,27],
+            "other":[3,4,5,7,8,12,16,17,21,22,24,25,26]
+        },
+        "schools":[]
+    },
+    "outdoorsman":{
+        "skills":{
+
+            "basic":[1,3,4,10,13,14,20,22],
+            "other":[5,21,24,26]
+        },
+        "schools":[]
+    },
+    "noble":{
+        "skills":{
+
+            "basic":[9,12,15,17,20],
+            "other":[1,2,3,10,11,21,26,27]
+        },
+        "schools":[]
+    },
+    "merchant":{
+        "skills":{
+
+            "basic":[8,12,17,18,20],
+            "other":[1,4,5,9]
+        },
+        "schools":[]
+    },
+    "medic":{
+        "skills":{
+
+            "basic":[2,18,19,25],
+            "other":[1,4,5,8,9,12,14,20]
+        },
+        "schools":[]
+    }
+}
