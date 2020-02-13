@@ -1,6 +1,6 @@
 import random
 from modules.randomizers import power_randomizer
-from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs, boones_cost_full, banes_cost_full
+from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs, boones_cost_full, banes_cost_full, lifestyles, skills
 
 
 class Character():
@@ -29,7 +29,7 @@ class Character():
     _sdb_mod = 0
     _car_mod = 0
 
-    def __init__(self, race="human"):
+    def __init__(self, race="human", lifestyle=None):
         self.race = race
 
         # character creation PCP
@@ -50,12 +50,19 @@ class Character():
         self.boones = []
         self.banes = []
 
+        # set lifestyle
+        if not lifestyle:
+            self.lifestyle = random.choice(list(lifestyles.keys()))
+        else:
+            self.lifestyle = lifestyle
+
     def __str__(self):
 
         return f"""
         -- RACIAL
         Race: {self.race}
-
+        -- LIFESTYLE
+        Lifestyle: {self.lifestyle}
         -- ATRIBUTES
         STR: {self.str} = {self._str} + {self._str_mod}
         AGI: {self.agi} = {self._agi} + {self._agi_mod}
