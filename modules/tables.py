@@ -272,7 +272,21 @@ banes_cost_full = {
     "wanted-15": 15,
 }
 
-
+skill_pts_balancing_table = {
+    # determines how mani extra skill points to 
+    # assing since they won't be buying packets
+    # skill_pcp: extra points
+    1:1,
+    2:2,
+    3:3,
+    4:4,
+    5:4,
+    6:4,
+    7:4,
+    8:4,
+    9:4,
+    10:4
+}
 skills = {
     1: "athletics",
     2: "chemistry",
@@ -307,16 +321,16 @@ lifestyles = {
     "academic": {
         "skills":{
 
-            "basic":[2,7,12, 19 ],
-            "other": [3,4,5,7,8,9,11,13,14,15,16,17,20,25,26]
+            "basic":[2,7,12, 19,9 ],
+            "other": [3,4,5,7,8,11,13,14,15,16,17,20,25,26]
         },
         "schools":[]
     },
     "criminal":{
         "skills":{
 
-            "basic": [8,11,12,14],
-            "other":[1,3,10,11,13,20,22,24,28]
+            "basic": [8,11,12,14,24],
+            "other":[1,3,10,13,20,22,28]
         },
         "schools":[]
     },
@@ -363,8 +377,8 @@ lifestyles = {
     "medic":{
         "skills":{
 
-            "basic":[2,18,19,25],
-            "other":[1,4,5,8,9,12,14,20]
+            "basic":[2,12,18,19,25,],
+            "other":[1,4,5,8,9,14,20]
         },
         "schools":[]
     }

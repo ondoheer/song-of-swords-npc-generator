@@ -1,6 +1,6 @@
 import random
 from modules.randomizers import power_randomizer
-from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs, boones_cost_full, banes_cost_full, lifestyles, skills
+from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs, boones_cost_full, banes_cost_full, lifestyles, skills, skill_pts_balancing_table
 
 
 class Character():
@@ -49,6 +49,9 @@ class Character():
         self.basic_boones_banes_pts = 0
         self.boones = []
         self.banes = []
+        # skills
+        self.skill_points = 0
+        self.skills = {}
 
         # set lifestyle
         if not lifestyle:
@@ -98,6 +101,9 @@ class Character():
         REMAINING POINTS: {self.boones_banes_points}
         BOONES: {self.boones}
         BANES: {self.banes}
+        -- SKILLS
+        Skill points: {self.skill_points}
+        Skills List: {self.skills}
 
 
         """
@@ -457,6 +463,17 @@ class Character():
                 self.allocate_boones_banes()
         """
     
+    def incease_skill(self, skill):
+        """
+        increases paying with pcp,
+        has to be modified to be paid with arc
+        """
+        try:
+            self.skills[skill] += 1
+        except KeyError:
+            self.skills[skill] = 1
+        self.skill_points -= 1
+
     def allocate_skills(self):
         """
         this will process based on pre made profiles
@@ -465,7 +482,35 @@ class Character():
         and will add extra points for not choosing the packets
         adequately
         """
-        pass
+
+        # set the skill points amount + the modifier
+        self.skill_points = pcp_investment["skill"][self.skill_pcp] + skill_pts_balancing_table[self.skill_pcp]
+        
+        # This might end up with weird characters
+        # have to assess it
+        
+        # All lifestyles have AT LEAST 5 basic skills
+        basic = random.sample(lifestyles[self.lifestyle]["skills"]["basic"], k=5)
+        # All lifestyles have AT LEAST 4 other skills
+        other_4 = random.sample(lifestyles[self.lifestyle]["skills"]["other"], k=4)
+
+        # 1. give 1 point to each basic skill
+        for skill in basic:
+            self.incease_skill(skill)
+        # 2. give 1 point to up to 5 basic skills
+        if self.skill_points > 4: #it can be 1, 4 or more at this stage
+            random.shuffle(basic)
+            for skill in basic:
+                if self.skill_points > 0:
+                    self.incease_skill(skill) 
+        # 3. give points between basic and other skills
+        merged = basic + other_4
+        while self.skill_points > 0:
+            self.incease_skill(random.choice(merged))
+            if self.skill_points == 0:
+                break
+
+        
     def build_npc(self):
         """
         Create a new NPC following the CC process
@@ -474,3 +519,4 @@ class Character():
         self.allocate_attributes()
         self.process_race_attrs()
         self.allocate_boones_banes()
+        self.allocate_skills()
