@@ -46,6 +46,7 @@ class Character():
         self.boones_banes_pcp = 0
         # boones n banes points to spend
         self.boones_banes_points = 0
+        self.basic_boones_banes_pts = 0
         self.boones = []
         self.banes = []
 
@@ -86,7 +87,8 @@ class Character():
         spend wealth: {self.wealth_pcp}
         -- BOONES AND BANES
         PCP: {self.boones_banes_pcp}
-        POINTS: {self.boones_banes_points}
+        BASIC PTS: {self.basic_boones_banes_pts}
+        REMAINING POINTS: {self.boones_banes_points}
         BOONES: {self.boones}
         BANES: {self.banes}
 
@@ -221,6 +223,7 @@ class Character():
             else:
                 max_value = self.avaliable_pcp
             self.boones_banes_pcp = random.randint(1, max_value)
+        self.basic_boones_banes_pts = pcp_investment["boones_banes"][self.boones_banes_pcp]
 
     def set_wealth_pcp(self):
         if self.avaliable_pcp > 1:
@@ -364,6 +367,7 @@ class Character():
 
         if _type == "boon":
             table = boones_cost_full
+
         elif _type == "bane":
             table = banes_cost_full
 
@@ -381,6 +385,33 @@ class Character():
             self.banes.append(bane_name)
             self.boones_banes_points += banes_list[bane_name]
 
+    def assign_boones(self, boones_list):
+        """
+        if boones and banes points have a positive value, select boones to compensate it to 0
+        """
+        if self.boones_banes_points > 0:
+            boon_name = random.choice(list(boones_list.keys()))
+            # this should append a dict with explanation not only a name of the boon
+            self.boones.append(boon_name)
+            self.boones_banes_points -= boones_list[boon_name]
+
+    def choose_boon_or_bane(self, _type):
+        """
+        chooses a boon or bane that hasn't been selected yet
+        """
+        if _type == "boon":
+            table = {k:v for k,v in boones_cost_full.items() if k not in self.boones}
+            boon_name = random.choice(list(table.keys()))
+            self.boones.append(boon_name)
+            self.boones_banes_points -= table[boon_name]
+
+        elif _type == "bane":
+            table = {k:v for k,v in banes_cost_full.items() if k not in self.banes}
+            bane_name = random.choice(list(table.keys()))
+            self.banes.append(bane_name)
+            self.boones_banes_points += table[bane_name]
+            
+        
     def allocate_boones_banes(self):
         """
         buy boones and banes
@@ -392,11 +423,29 @@ class Character():
         """
         self.boones_banes_points = pcp_investment["boones_banes"][self.boones_banes_pcp]
 
+        # if the selected tier implies negative values
         while self.boones_banes_points < 0:
+
             # filter banes to choose from
-            banes = self.filter_boones_or_banes_by_value(
+            can_buy_banes = self.filter_boones_or_banes_by_value(
                 self.boones_banes_points, "bane")
-            self.assign_banes(banes)
+            self.assign_banes(can_buy_banes)
+            if self.boones_banes_points == 0:
+                break
+        # if the selected tier implies points to buy boones without banes
+
+        while self.boones_banes_pcp > 0:
+            can_buy_boones = self.filter_boones_or_banes_by_value(
+                self.boones_banes_points, "boon")
+            self.assign_boones(can_buy_boones)
+            if self.boones_banes_points == 0:
+                break
+        # randomly flavour more boones and banes
+        if self.boones_banes_points == 0:
+            choose_new_boon = random.choice([True, False])
+            if choose_new_boon:
+                self.choose_boon_or_bane("boon")
+                self.allocate_boones_banes()
 
     def build_npc(self):
         """
