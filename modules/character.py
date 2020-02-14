@@ -1,7 +1,6 @@
 import random
-from modules.randomizers import power_randomizer
 from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs, boones_cost_full, banes_cost_full, lifestyles, skills, skill_pts_balancing_table
-
+from modules.config import MILITARY_LIFESTYLES, NON_MILITARY_LIFESTYLES
 
 class Character():
 
@@ -191,7 +190,7 @@ class Character():
             if power:
                 self.power = campaign_power[power]
             else:
-                self.power = power_randomizer()
+                self.power = random.choice(list(campaign_power.keys()))
                 self.pcp = campaign_power[self.power]["pcp"]
                 self.max = campaign_power[self.power]["max"]
 
@@ -218,7 +217,12 @@ class Character():
         self.race_pcp = 1
 
     def set_attribute_pcp(self):
-        if self.avaliable_pcp > 1:
+        """
+        defines how many pcp to allocate to attributes
+        has no relationship with the lifestyle
+        """
+        
+        if self.avaliable_pcp > 1 :
             if self.max < self.avaliable_pcp:
                 max_value = self.max
             else:
@@ -226,7 +230,16 @@ class Character():
             self.attributes_pcp = random.randint(1, max_value)
 
     def set_spp_pcp(self):
-        if self.avaliable_pcp > 1:
+        """
+        shouldn't give many to non military lifestyles
+        still the randomizer will allow for it to happen
+        this way but it will break.
+        """
+        if self.lifestyle in NON_MILITARY_LIFESTYLES:
+            knows_melee = random.choice([True, False, False, False, False, False])
+        else:
+            knows_melee = True 
+        if self.avaliable_pcp > 1 and knows_melee:
             if self.max < self.avaliable_pcp:
                 max_value = self.max
             else:
@@ -234,6 +247,9 @@ class Character():
             self.spp_pcp = random.randint(1, max_value)
 
     def set_skill_pcp(self):
+        """
+        defines how many pcp to spend in skills
+        """
         if self.avaliable_pcp > 1:
             if self.max < self.avaliable_pcp:
                 max_value = self.max
@@ -242,6 +258,9 @@ class Character():
             self.skill_pcp = random.randint(1, max_value)
 
     def set_boones_banes_pcp(self):
+        """
+        defines how many pcp to spend in boones and banes
+        """
         if self.avaliable_pcp > 1:
             if self.max < self.avaliable_pcp:
                 max_value = self.max
@@ -251,16 +270,24 @@ class Character():
         self.basic_boones_banes_pts = pcp_investment["boones_banes"][self.boones_banes_pcp]
 
     def set_wealth_pcp(self):
+        """
+        sets the wealth pcp, it's not based on lifestyles but it limits itself to minor noble
+        """
+        # TODO move this to a kwargs config initializer
+        max_wealth = 6
         if self.avaliable_pcp > 1:
-            if self.max < self.avaliable_pcp:
-                max_value = self.max
+            if max_wealth < self.avaliable_pcp:
+                max_value = max_wealth
             else:
                 max_value = self.avaliable_pcp
             self.wealth_pcp = random.randint(1, max_value)
 
     def spend_remaining_pcp(self):
+        """
+        spend first the spp_pcp only if in the military classes
+        """
         # hand picked order
-        if self.spp_pcp < self.max:
+        if self.spp_pcp < self.max and self.lifestyle in MILITARY_LIFESTYLES:
             if self.avaliable_pcp + self.spp_pcp > self.max:
                 self.spp_pcp = self.max
             else:
@@ -304,6 +331,10 @@ class Character():
             self.spend_remaining_pcp()
 
     def spent_attr(self):
+        """
+        adds up how many pcp were spent on attrs
+        substracts 8 because everyone starts with 1
+        """
         return sum([
             self._str,
             self._agi,
@@ -317,6 +348,9 @@ class Character():
 
     @property
     def avaliable_attr_pts(self):
+        """
+        calculates how many attr pts haven't been spent yet
+        """
         return self.attributes_points - self.spent_attr()
 
     def set_random_attr(self):
@@ -351,14 +385,17 @@ class Character():
             self.process_attr_cost(value - 1)
 
     def allocate_attributes(self):
-
-        self.attributes_points = pcp_investment["attribute"][self.attributes_pcp]
-
+        """
         # first give 2 to each,
         # since the lowest attr_pcp is 22
         # this will leave at least 8 to
         # spend the rest randomly
 
+        """
+
+        self.attributes_points = pcp_investment["attribute"][self.attributes_pcp]
+
+        
         # give all stats a basic random stat up to 2
         self._str = 2
         self._agi = 2
