@@ -1,5 +1,5 @@
 import random
-from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs, boones_cost_full, banes_cost_full, lifestyles, skills, skill_pts_balancing_table
+from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs, boones_cost_full, banes_cost_full, lifestyles, skills, skill_pts_balancing_table, spp_schools, proficencies_no_gun, school_advancement
 from modules.config import MILITARY_LIFESTYLES, NON_MILITARY_LIFESTYLES
 
 class Character():
@@ -56,6 +56,8 @@ class Character():
         self.money = {}
         # SPP
         self.spp_points = 0
+        self.school = None # now it only supports 1 school
+        self.proficencies = []
 
         # set lifestyle
         if not lifestyle:
@@ -63,7 +65,7 @@ class Character():
         else:
             self.lifestyle = lifestyle
 
-        # social status
+        
 
     def __str__(self):
 
@@ -114,9 +116,10 @@ class Character():
         Social Status: {self.social_status}
         Money: {self.money}
         -- SCHOOLS
-
-
-
+        School: {self.school["name"]}
+        School Level: {self.school["level"]}
+        Cost: {self.school["cost"]}
+        Proficencies: {self.proficencies}
         """
 
     @property
@@ -570,12 +573,61 @@ class Character():
         self.money = pcp_investment["wealth"][self.wealth_pcp]["amount"]
         self.social_status = pcp_investment["wealth"][self.wealth_pcp]["name"]
     
+    def assign_proficencies(self):
+        """
+        1. if human assign all
+        2. other races - asses remaining pts, if more than % 3 num profs or 4
+        """
+
+        if self.race == "human":
+            proficencies_to_get = self.school["num_proficencies"]
+        else:
+            proficencies_to_get = min(self.spp_points // 3, 4)
+            # pay for them
+            self.spp_points -= proficencies_to_get
+
+        bought_proficiencies = random.sample(proficencies_no_gun, proficencies_to_get)
+        self.proficencies = {p:0 for p in bought_proficiencies}
+
+    def advance_school(self):
+        """
+        spend the remaning points
+        """
+
     def allocate_spp(self):
         """
-        choose school and assign points
+        choose school and assign points 
+        1. determine schools that can be bought (most non military will be scrapers)
+        2. choose proficencies
+        3. spend the remaining spp_points
         """
+
         self.spp_points = pcp_investment["spp"][self.spp_pcp]
+        # if not many spp don't buy an expensive school
+        max_spp_pts_for_school = 5
+        if self.spp_points < 4:
+            max_spp_pts_for_school = 1
+        if self.spp_points < 10:
+            max_spp_pts_for_school = 3 
+        avaliable_schools = [s for s in spp_schools if s["cost"] <= max_spp_pts_for_school]
+        # choose school
+        self.school = random.choice(avaliable_schools)
+        self.school["level"] = 1
+        # choose proficencies
+        self.assign_proficencies()
+        # spend remaning spp_points
+        while self.spp_points > 0:
+            next_lvl = self.school["level"] + 1
+            if self.spp_points > school_advancement[next_lvl]:
+                self.school["level"] += 1
+                self.spp_points -= school_advancement[next_lvl]
+
+            if self.spp_points < school_advancement[next_lvl +1]:
+                break
         
+
+
+
 
     def build_npc(self):
         """
@@ -589,3 +641,4 @@ class Character():
         self.allocate_boones_banes()
         self.allocate_skills()
         self.allocate_wealth()
+        self.allocate_spp()
