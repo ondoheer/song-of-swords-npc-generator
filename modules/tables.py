@@ -316,6 +316,7 @@ skill_pts_balancing_table = {
     # determines how mani extra skill points to
     # assing since they won't be buying packets
     # skill_pcp: extra points
+    0: 0,
     1: 1,
     2: 2,
     3: 3,
@@ -479,6 +480,54 @@ school_advancement = {
     19: 10,
     20: 10,
     21: 20
+}
+
+school_talents = {
+    1: 1,
+    2: 1,
+    3: 1,
+    4: 1,
+    5: 2,
+    6: 2,
+    7: 3,
+    8: 3,
+    9: 3,
+    10: 3,
+    11: 4,
+    12: 4,
+    13: 5,
+    14: 5,
+    15: 5,
+    16: 5,
+    17: 6,
+    18: 6,
+    19: 7,
+    20: 7,
+    21: 7
+}
+
+school_sup_maneuvers = {
+    1: 0,
+    2: 0,
+    3: 1,
+    4: 1,
+    5: 1,
+    6: 2,
+    7: 2,
+    8: 2,
+    9: 3,
+    10: 3,
+    11: 3,
+    12: 4,
+    13: 4,
+    14: 4,
+    15: 5,
+    16: 5,
+    17: 5,
+    18: 6,
+    19: 6,
+    20: 7,
+    21: 7
 }
 proficencies_all = [
     "dagger",

@@ -1,10 +1,14 @@
 from modules.character import Character
 
+DEBUG = False
+
 
 def run():
     c = Character(race="dwarf")
     c.build_npc()
-    print(c)
+    if DEBUG:
+        print(c)
+    c.print_pc()
 
 
 if __name__ == "__main__":
