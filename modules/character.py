@@ -112,6 +112,8 @@ class Character():
         -- WEALTH
         Social Status: {self.social_status}
         Money: {self.money}
+        -- SCHOOLS
+
 
 
         """
@@ -524,7 +526,7 @@ class Character():
 
     def allocate_wealth(self):
         """
-        allocates money and social title
+        allocates money and social status
         """
         self.money = pcp_investment["wealth"][self.wealth_pcp]["amount"]
         self.social_status = pcp_investment["wealth"][self.wealth_pcp]["name"]
