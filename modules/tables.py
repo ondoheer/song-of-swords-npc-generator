@@ -74,43 +74,83 @@ pcp_investment = {
     "wealth": {  # social class and wealth
         1: {
             "name": "Slave/Exile",
-            "amount": "10sp"
+            "amount": {
+                "cp": 0,
+                "sp": 10,
+                "gp": 0
+            }
         },
         2: {
             "name": "Peasant",
-            "amount": "5gp"
+            "amount": {
+                "cp": 0,
+                "sp": 0,
+                "gp": 5
+            }
         },
         3: {
             "name": "Poor freeman",
-            "amount": "15gp"
+            "amount": {
+                "cp": 0,
+                "sp": 0,
+                "gp": 15
+            }
         },
         4: {
             "name": "freeman",
-            "amount": "25gp"
+            "amount": {
+                "cp": 0,
+                "sp": 0,
+                "gp": 25
+            }
         },
         5: {
             "name": "High freeman",
-            "amount": "40gp"
+            "amount": {
+                "cp": 0,
+                "sp": 0,
+                "gp": 40
+            }
         },
         6: {
             "name": "Minor Noble",
-            "amount": "80gp"
+            "amount": {
+                "cp": 0,
+                "sp": 0,
+                "gp": 80
+            }
         },
         7: {
             "name": "Landed Noble",
-            "amount": "150gp"
+            "amount": {
+                "cp": 0,
+                "sp": 0,
+                "gp": 150
+            }
         },
         8: {
             "name": "High Noble",
-            "amount": "300gp"
+            "amount": {
+                "cp": 0,
+                "sp": 0,
+                "gp": 300
+            }
         },
         9: {
             "name": "Royalty",
-            "amount": "800gp"
+            "amount": {
+                "cp": 0,
+                "sp": 0,
+                "gp": 800
+            }
         },
         10: {
             "name": "High Royalty",
-            "amount": "1500gp"
+            "amount": {
+                "cp": 0,
+                "sp": 0,
+                "gp": 1500
+            }
         },
     },
     "boones_banes": {
@@ -215,7 +255,7 @@ banes_cost_full = {
     "braggart": 3,
     "brain-dmg-4": 4,
     "brain-dmg-8": 8,
-    #"broken-limb": 0,
+    # "broken-limb": 0,
     "complete-monster": 10,
     "craven-4": 4,
     "craven-8": 8,
@@ -223,7 +263,7 @@ banes_cost_full = {
     "debt-2": 2,
     "debt-4": 4,
     "debt-8": 8,
-    #"dire-past": 0,
+    # "dire-past": 0,
     "enemies-3": 3,
     "enemies-10": 10,
     "enemies-15": 15,
@@ -273,19 +313,19 @@ banes_cost_full = {
 }
 
 skill_pts_balancing_table = {
-    # determines how mani extra skill points to 
+    # determines how mani extra skill points to
     # assing since they won't be buying packets
     # skill_pcp: extra points
-    1:1,
-    2:2,
-    3:3,
-    4:4,
-    5:4,
-    6:4,
-    7:4,
-    8:4,
-    9:4,
-    10:4
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 4,
+    6: 4,
+    7: 4,
+    8: 4,
+    9: 4,
+    10: 4
 }
 skills = {
     1: "athletics",
@@ -319,67 +359,67 @@ skills = {
 }
 lifestyles = {
     "academic": {
-        "skills":{
+        "skills": {
 
-            "basic":[2,7,12, 19,9 ],
-            "other": [3,4,5,7,8,11,13,14,15,16,17,20,25,26]
+            "basic": [2, 7, 12, 19, 9],
+            "other": [3, 4, 5, 7, 8, 11, 13, 14, 15, 16, 17, 20, 25, 26]
         },
-        "schools":[]
+        "schools": []
     },
-    "criminal":{
-        "skills":{
+    "criminal": {
+        "skills": {
 
-            "basic": [8,11,12,14,24],
-            "other":[1,3,10,13,20,22,28]
+            "basic": [8, 11, 12, 14, 24],
+            "other": [1, 3, 10, 13, 20, 22, 28]
         },
-        "schools":[]
+        "schools": []
     },
-    "civilian":{
-        "skills":{
+    "civilian": {
+        "skills": {
 
-            "basic":[4,5,18,20,14],
-            "other":[1,3,10,12,13,26]
+            "basic": [4, 5, 18, 20, 14],
+            "other": [1, 3, 10, 12, 13, 26]
         },
-        "schools":[]
+        "schools": []
     },
-    "military":{
-        "skills":{
+    "military": {
+        "skills": {
 
-            "basic":[1,6,11,13,14,20,23,27],
-            "other":[3,4,5,7,8,12,16,17,21,22,24,25,26]
+            "basic": [1, 6, 11, 13, 14, 20, 23, 27],
+            "other": [3, 4, 5, 7, 8, 12, 16, 17, 21, 22, 24, 25, 26]
         },
-        "schools":[]
+        "schools": []
     },
-    "outdoorsman":{
-        "skills":{
+    "outdoorsman": {
+        "skills": {
 
-            "basic":[1,3,4,10,13,14,20,22],
-            "other":[5,21,24,26]
+            "basic": [1, 3, 4, 10, 13, 14, 20, 22],
+            "other": [5, 21, 24, 26]
         },
-        "schools":[]
+        "schools": []
     },
-    "noble":{
-        "skills":{
+    "noble": {
+        "skills": {
 
-            "basic":[9,12,15,17,20],
-            "other":[1,2,3,10,11,21,26,27]
+            "basic": [9, 12, 15, 17, 20],
+            "other": [1, 2, 3, 10, 11, 21, 26, 27]
         },
-        "schools":[]
+        "schools": []
     },
-    "merchant":{
-        "skills":{
+    "merchant": {
+        "skills": {
 
-            "basic":[8,12,17,18,20],
-            "other":[1,4,5,9]
+            "basic": [8, 12, 17, 18, 20],
+            "other": [1, 4, 5, 9]
         },
-        "schools":[]
+        "schools": []
     },
-    "medic":{
-        "skills":{
+    "medic": {
+        "skills": {
 
-            "basic":[2,12,18,19,25,],
-            "other":[1,4,5,8,9,14,20]
+            "basic": [2, 12, 18, 19, 25, ],
+            "other": [1, 4, 5, 8, 9, 14, 20]
         },
-        "schools":[]
+        "schools": []
     }
 }

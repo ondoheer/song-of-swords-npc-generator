@@ -52,12 +52,17 @@ class Character():
         # skills
         self.skill_points = 0
         self.skills = {}
+        # wealth
+        self.social_status = None
+        self.money = {}
 
         # set lifestyle
         if not lifestyle:
             self.lifestyle = random.choice(list(lifestyles.keys()))
         else:
             self.lifestyle = lifestyle
+
+        # social status
 
     def __str__(self):
 
@@ -104,6 +109,9 @@ class Character():
         -- SKILLS
         Skill points: {self.skill_points}
         Skills List: {self.skills}
+        -- WEALTH
+        Social Status: {self.social_status}
+        Money: {self.money}
 
 
         """
@@ -413,18 +421,19 @@ class Character():
         chooses a boon or bane that hasn't been selected yet
         """
         if _type == "boon":
-            table = {k:v for k,v in boones_cost_full.items() if k not in self.boones}
+            table = {k: v for k, v in boones_cost_full.items()
+                     if k not in self.boones}
             boon_name = random.choice(list(table.keys()))
             self.boones.append(boon_name)
             self.boones_banes_points -= table[boon_name]
 
         elif _type == "bane":
-            table = {k:v for k,v in banes_cost_full.items() if k not in self.banes}
+            table = {k: v for k, v in banes_cost_full.items()
+                     if k not in self.banes}
             bane_name = random.choice(list(table.keys()))
             self.banes.append(bane_name)
             self.boones_banes_points += table[bane_name]
-            
-        
+
     def allocate_boones_banes(self):
         """
         buy boones and banes
@@ -462,7 +471,7 @@ class Character():
                 self.choose_boon_or_bane("boon")
                 self.allocate_boones_banes()
         """
-    
+
     def incease_skill(self, skill):
         """
         increases paying with pcp,
@@ -484,25 +493,28 @@ class Character():
         """
 
         # set the skill points amount + the modifier
-        self.skill_points = pcp_investment["skill"][self.skill_pcp] + skill_pts_balancing_table[self.skill_pcp]
-        
+        self.skill_points = pcp_investment["skill"][self.skill_pcp] + \
+            skill_pts_balancing_table[self.skill_pcp]
+
         # This might end up with weird characters
         # have to assess it
-        
+
         # All lifestyles have AT LEAST 5 basic skills
-        basic = random.sample(lifestyles[self.lifestyle]["skills"]["basic"], k=5)
+        basic = random.sample(
+            lifestyles[self.lifestyle]["skills"]["basic"], k=5)
         # All lifestyles have AT LEAST 4 other skills
-        other_4 = random.sample(lifestyles[self.lifestyle]["skills"]["other"], k=4)
+        other_4 = random.sample(
+            lifestyles[self.lifestyle]["skills"]["other"], k=4)
 
         # 1. give 1 point to each basic skill
         for skill in basic:
             self.incease_skill(skill)
         # 2. give 1 point to up to 5 basic skills
-        if self.skill_points > 4: #it can be 1, 4 or more at this stage
+        if self.skill_points > 4:  # it can be 1, 4 or more at this stage
             random.shuffle(basic)
             for skill in basic:
                 if self.skill_points > 0:
-                    self.incease_skill(skill) 
+                    self.incease_skill(skill)
         # 3. give points between basic and other skills
         merged = basic + other_4
         while self.skill_points > 0:
@@ -510,13 +522,22 @@ class Character():
             if self.skill_points == 0:
                 break
 
-        
+    def allocate_wealth(self):
+        """
+        allocates money and social title
+        """
+        self.money = pcp_investment["wealth"][self.wealth_pcp]["amount"]
+        self.social_status = pcp_investment["wealth"][self.wealth_pcp]["name"]
+
     def build_npc(self):
         """
         Create a new NPC following the CC process
         """
+        # TODO URGENT modify it so that it cannot be wealthy if it has a specific lifestyle incompatible with it
         self.allocate_pcp()
+
         self.allocate_attributes()
         self.process_race_attrs()
         self.allocate_boones_banes()
         self.allocate_skills()
+        self.allocate_wealth()
