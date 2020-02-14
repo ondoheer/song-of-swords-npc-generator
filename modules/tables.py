@@ -423,3 +423,67 @@ lifestyles = {
         "schools": []
     }
 }
+
+spp_schools = [
+    {
+        "name": "scraper",
+        "cost": 0,
+        "num_proficencies": 4
+    },
+    {
+        "name": "soldier",
+        "cost": 1,
+        "num_proficencies": 10
+    },
+    {
+        "name": "officer",
+        "cost": 3,
+        "num_proficencies": 4
+    },
+    {
+        "name": "noble",
+        "cost": 5,
+        "num_proficencies": 3
+    },
+    {
+        "name": "traditional-fencer",
+        "cost": 5,
+        "num_proficencies": 4
+    },
+    {
+        "name": "unorthodox",
+        "cost": 5,
+        "num_proficencies": 6
+    }
+]
+
+proficencies_all = [
+    "dagger",
+    "1-h-blades",
+    "1-h-blunt",
+    "2-h-blades",
+    "2-h-blunt",
+    "pugilism",
+    "wrestling",
+    "bow",
+    "pistol",
+    "crossbow",
+    "polearms",
+    "spear",
+    "throwing"
+]
+
+proficencies_no_gun = [
+    "dagger",
+    "1-h-blades",
+    "1-h-blunt",
+    "2-h-blades",
+    "2-h-blunt",
+    "pugilism",
+    "wrestling",
+    "bow",
+    "crossbow",
+    "polearms",
+    "spear",
+    "throwing"
+]

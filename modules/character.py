@@ -55,6 +55,8 @@ class Character():
         # wealth
         self.social_status = None
         self.money = {}
+        # SPP
+        self.spp_points = 0
 
         # set lifestyle
         if not lifestyle:
@@ -530,6 +532,13 @@ class Character():
         """
         self.money = pcp_investment["wealth"][self.wealth_pcp]["amount"]
         self.social_status = pcp_investment["wealth"][self.wealth_pcp]["name"]
+    
+    def allocate_spp(self):
+        """
+        choose school and assign points
+        """
+        self.spp_points = pcp_investment["spp"][self.spp_pcp]
+        
 
     def build_npc(self):
         """
