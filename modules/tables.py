@@ -358,6 +358,37 @@ skills = {
     27: "tactics",
     28: "thievery"
 }
+
+skill_attributes = {
+    1: "end, mob, agi, str",
+    2: "int",
+    3: "end",
+    4: "int",
+    5: "int",
+    6: "wil",
+    7: "int",
+    8: "cha",
+    9: "int",
+    10: "per",
+    11: "cha",
+    12: "int",
+    13: "per",
+    14: "per",
+    15: "cha",
+    16: "agi, cha, wit, end",
+    17: "cha, wit, int",
+    18: "wil",
+    19: "int",
+    20: "adr, cha",
+    21: "wit",
+    22: "agi",
+    23: "int",
+    24: "cha",
+    25: "int",
+    26: "end",
+    27: "int",
+    28: "agi"
+}
 lifestyles = {
     "academic": {
         "skills": {

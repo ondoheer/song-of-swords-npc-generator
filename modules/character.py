@@ -1,5 +1,5 @@
 import random
-from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs, boones_cost_full, banes_cost_full, lifestyles, skills, skill_pts_balancing_table, spp_schools, proficencies_no_gun, school_advancement, school_talents, school_sup_maneuvers
+from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs, boones_cost_full, banes_cost_full, lifestyles, skills, skill_pts_balancing_table, spp_schools, proficencies_no_gun, school_advancement, school_talents, school_sup_maneuvers, skill_attributes
 from modules.config import MILITARY_LIFESTYLES, NON_MILITARY_LIFESTYLES
 
 
@@ -678,7 +678,7 @@ class Character():
         """
         s = ""
         for skill, v in self.skills.items():
-            s += f"{skills[skill]}: {v}\n\t"
+            s += f"{skills[skill]}: {v} ({skill_attributes[skill]})\n\t"
         return s
 
     def print_proficiencies(self):
