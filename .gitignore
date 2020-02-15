@@ -1,4 +1,6 @@
 venv/
 *.txt
 .vscode
-__pychache__
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
