@@ -66,6 +66,8 @@ class Character():
         else:
             self.lifestyle = lifestyle
 
+        # to be displayed if the master creates it
+        self.background = ""
     def __str__(self):
 
         return f"""
@@ -595,7 +597,7 @@ class Character():
         spend the remaning points
         """
         while self.spp_points > 0:
-          
+
             next_lvl = self.school["level"] + 1
             if self.spp_points >= school_advancement[next_lvl]:
                 self.school["level"] += 1
@@ -657,7 +659,7 @@ class Character():
         self.allocate_spp()
 
     def print_boones(self):
-        
+
         s = ""
         for boon in self.boones:
             s += f"- {boon} \n\t"
@@ -676,13 +678,18 @@ class Character():
         """
         s = ""
         for skill, v in self.skills.items():
-            s += f"{skills[skill]} {v}\n\t"
+            s += f"{skills[skill]}: {v}\n\t"
         return s
+
     def print_proficiencies(self):
         s = ""
         for p in self.proficencies:
             s += f"- {p}\n\t"
         return s
+
+    def add_background_story(self, background):
+        self.background = background
+
 
     def get_pc(self):
         """
@@ -693,18 +700,25 @@ class Character():
         Character: {self.race} - {self.lifestyle}
         Starting Power: {self.power}
         Social Class: {self.social_status}
+        Background:
+        {self.background}
         --------------------------------
         ATTRIBUTES
         --------------------------------
-        STR: {self.str} | AGI: {self.agi} 
-        END: {self.end} | HLT: {self.hlt} 
-        WIL: {self.wil} | WIT: {self.wit} 
-        PER: {self.per} | INT: {self.int} 
+        STR: {self.str} | AGI: {self.agi} | END: {self.end} | HLT: {self.hlt} 
+        WIL: {self.wil} | WIT: {self.wit} | PER: {self.per} | INT: {self.int} 
+        ADR: {self.adr} | MOB: {self.mob} | CAR: {self.car} | CHA: {self.cha} 
+        TOU: {self.tou} | SDB: {self.sdb} | GRIT: {self.grit}
         ---------------------------------
-        ADR: {self.adr} | MOB: {self.mob}
-        CAR: {self.car} | CHA: {self.cha} 
-        TOU: {self.tou} | SDB: {self.sdb}
-        GRIT: {self.grit}
+        COMBAT (Base CPs)
+        ---------------------------------
+        Melee CP: {self.adr + self.school["level"]}
+        Misile CP: {self.school["level"]}
+        --------------------------------
+        SCHOOLS
+        ---------------------------------
+        {self.school["name"]} lvl:{self.school["level"]} - talents:{self.school["talents"]} sup maneuvers:{self.school["maneuvers"]}
+        {self.print_proficiencies()} 
         ---------------------------------
         BOONES
         ---------------------------------
@@ -722,13 +736,8 @@ class Character():
         GP: {self.money["gp"]}
         SP: {self.money["sp"]}
         CP: {self.money["cp"]}
-        ---------------------------------
-        SCHOOLS
-        ---------------------------------
-        {self.school["name"]} lvl: {self.school["level"]}
-        {self.print_proficiencies()}
-        # talents: {self.school["talents"]}
-        # superior maneuvers: {self.school["maneuvers"]}
+
         """
+
     def print_pc(self):
         print(self.get_pc())
