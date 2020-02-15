@@ -1,2 +1,4 @@
 venv/
 *.txt
+.vscode
+__pychache__
