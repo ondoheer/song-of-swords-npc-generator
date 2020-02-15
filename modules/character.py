@@ -684,12 +684,11 @@ class Character():
             s += f"- {p}\n\t"
         return s
 
-    def print_pc(self):
+    def get_pc(self):
         """
         Prints the character sheet
         """
-
-        print(f"""
+        return f"""
         --------------------------------
         Character: {self.race} - {self.lifestyle}
         Starting Power: {self.power}
@@ -730,4 +729,6 @@ class Character():
         {self.print_proficiencies()}
         # talents: {self.school["talents"]}
         # superior maneuvers: {self.school["maneuvers"]}
-        """)
+        """
+    def print_pc(self):
+        print(self.get_pc())
