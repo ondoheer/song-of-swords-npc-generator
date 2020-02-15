@@ -2,6 +2,7 @@ import random
 from modules.tables import campaign_power, races_table, pcp_investment, attribute_costs, boones_cost_full, banes_cost_full, lifestyles, skills, skill_pts_balancing_table, spp_schools, proficencies_no_gun, school_advancement, school_talents, school_sup_maneuvers
 from modules.config import MILITARY_LIFESTYLES, NON_MILITARY_LIFESTYLES
 
+
 class Character():
 
     _str = 1
@@ -56,7 +57,7 @@ class Character():
         self.money = {}
         # SPP
         self.spp_points = 0
-        self.school = None # now it only supports 1 school
+        self.school = None  # now it only supports 1 school
         self.proficencies = []
 
         # set lifestyle
@@ -64,8 +65,6 @@ class Character():
             self.lifestyle = random.choice(list(lifestyles.keys()))
         else:
             self.lifestyle = lifestyle
-
-        
 
     def __str__(self):
 
@@ -226,8 +225,8 @@ class Character():
         defines how many pcp to allocate to attributes
         has no relationship with the lifestyle
         """
-        
-        if self.avaliable_pcp > 1 :
+
+        if self.avaliable_pcp > 1:
             if self.max < self.avaliable_pcp:
                 max_value = self.max
             else:
@@ -241,9 +240,10 @@ class Character():
         this way but it will break.
         """
         if self.lifestyle in NON_MILITARY_LIFESTYLES:
-            knows_melee = random.choice([True, False, False, False, False, False])
+            knows_melee = random.choice(
+                [True, False, False, False, False, False])
         else:
-            knows_melee = True 
+            knows_melee = True
         if self.avaliable_pcp > 1 and knows_melee:
             if self.max < self.avaliable_pcp:
                 max_value = self.max
@@ -400,7 +400,6 @@ class Character():
 
         self.attributes_points = pcp_investment["attribute"][self.attributes_pcp]
 
-        
         # give all stats a basic random stat up to 2
         self._str = 2
         self._agi = 2
@@ -574,7 +573,7 @@ class Character():
         """
         self.money = pcp_investment["wealth"][self.wealth_pcp]["amount"]
         self.social_status = pcp_investment["wealth"][self.wealth_pcp]["name"]
-    
+
     def assign_proficencies(self):
         """
         1. if human assign all
@@ -588,23 +587,23 @@ class Character():
             # pay for them
             self.spp_points -= proficencies_to_get
 
-        self.proficencies = random.sample(proficencies_no_gun, proficencies_to_get)
+        self.proficencies = random.sample(
+            proficencies_no_gun, proficencies_to_get)
 
     def advance_school(self):
         """
         spend the remaning points
         """
         while self.spp_points > 0:
-            print(self.spp_points)
-            print(self.school["level"])
+          
             next_lvl = self.school["level"] + 1
             if self.spp_points >= school_advancement[next_lvl]:
                 self.school["level"] += 1
                 self.spp_points -= school_advancement[next_lvl]
 
-            if self.spp_points < school_advancement[next_lvl +1] or self.spp_points == 0:
+            if self.spp_points < school_advancement[next_lvl + 1] or self.spp_points == 0:
                 break
-    
+
     def assign_school_maneuvers(self):
         """
         assing number of maneuvers avaliable to the character
@@ -616,7 +615,7 @@ class Character():
         assing number of talents avaliable to the character
         """
         self.school["talents"] = school_talents[self.school["level"]]
-    
+
     def allocate_spp(self):
         """
         choose school and assign points 
@@ -631,8 +630,9 @@ class Character():
         if self.spp_points < 4:
             max_spp_pts_for_school = 1
         if self.spp_points < 10:
-            max_spp_pts_for_school = 3 
-        avaliable_schools = [s for s in spp_schools if s["cost"] <= max_spp_pts_for_school]
+            max_spp_pts_for_school = 3
+        avaliable_schools = [
+            s for s in spp_schools if s["cost"] <= max_spp_pts_for_school]
         # choose school
         self.school = random.choice(avaliable_schools)
         self.school["level"] = 1
@@ -643,10 +643,6 @@ class Character():
         # assign talents and maneuvers
         self.assign_school_talents()
         self.assign_school_maneuvers()
-        
-
-
-
 
     def build_npc(self):
         """
@@ -659,12 +655,33 @@ class Character():
         self.allocate_skills()
         self.allocate_wealth()
         self.allocate_spp()
-    
+
     def print_boones(self):
+        
         s = ""
         for boon in self.boones:
-            s+= f"- {boon} \n"
-        
+            s += f"- {boon} \n\t"
+
+        return s
+
+    def print_banes(self):
+        s = ""
+        for bane in self.banes:
+            s += f"- {bane} \n\t"
+        return s
+
+    def print_skills(self):
+        """
+        prints skills and TODO print asociated attr
+        """
+        s = ""
+        for skill, v in self.skills.items():
+            s += f"{skills[skill]} {v}\n\t"
+        return s
+    def print_proficiencies(self):
+        s = ""
+        for p in self.proficencies:
+            s += f"- {p}\n\t"
         return s
 
     def print_pc(self):
@@ -676,6 +693,7 @@ class Character():
         --------------------------------
         Character: {self.race} - {self.lifestyle}
         Starting Power: {self.power}
+        Social Class: {self.social_status}
         --------------------------------
         ATTRIBUTES
         --------------------------------
@@ -692,19 +710,24 @@ class Character():
         BOONES
         ---------------------------------
         {self.print_boones()}
-        
-        BANES: {self.banes}
-        -- SKILLS
-        Skill points: {self.skill_points}
-        Skills List: {self.skills}
-        -- WEALTH
-        Social Status: {self.social_status}
-        Money: {self.money}
-        -- SCHOOLS
-        School: {self.school["name"]}
-        School Level: {self.school["level"]}
+        ---------------------------------
+        BANES
+        {self.print_banes()}
+        ---------------------------------
+        SKILLS
+        ---------------------------------
+        {self.print_skills()}
+        ---------------------------------
+        MONEY
+        ---------------------------------
+        GP: {self.money["gp"]}
+        SP: {self.money["sp"]}
+        CP: {self.money["cp"]}
+        ---------------------------------
+        SCHOOLS
+        ---------------------------------
+        {self.school["name"]} lvl: {self.school["level"]}
+        {self.print_proficiencies()}
         # talents: {self.school["talents"]}
         # superior maneuvers: {self.school["maneuvers"]}
-        Cost: {self.school["cost"]}
-        Proficencies: {self.proficencies}
         """)
