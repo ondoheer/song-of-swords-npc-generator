@@ -1,4 +1,5 @@
 from modules.character import Character
+from modules.grit import grit_table
 
 DEBUG = False
 lifestyles = {
@@ -69,15 +70,28 @@ def split_text(text, position):
     broken_lines = 0
     new_position = position
     while broken_lines <= lines_to_break:
-        break_attempt = text[position]
-        while break_attempt != " ":
-            new_position = new_position + 1
-            break_attempt = text[new_position]
-        new_text += "\t" + text[:new_position] + "\n"
-        text = text[new_position:]
+        try:
+            break_attempt = text[position]
+            while break_attempt != " ":
+                new_position = new_position + 1
+                break_attempt = text[new_position]
+            new_text += "\t" + text[:new_position] + "\n"
+            try:
+                text = text[new_position:]
+            except IndexError:
+                pass
+        except IndexError:
+            pass
         broken_lines += 1
     new_text += "\t" + text
     return new_text
+
+
+def set_grit_lvl():
+    print("Grit Levels")
+    for k, v in grit_table.items():
+        print(f"{k}) {v}")
+    return int(input("what level do you want? "))
 
 
 def run():
@@ -89,6 +103,7 @@ def run():
     NPC Builder
     -------------------------------
     """)
+
     lifestyle_code = 10  # to trigger the while loop
 
     while int(lifestyle_code) > 9:
@@ -104,6 +119,14 @@ def run():
     if DEBUG:
         print(c)
     c.print_pc()
+
+    # Alter grit
+    print(f""" 
+    The NPC current grit lvl is: {c.grit}
+    """)
+    alter_grit = yes_no("Do you want to alter the NPC current grit lvl")
+    if alter_grit == "y":
+        c.set_grit(set_grit_lvl())
 
     # write background
     write_background = yes_no("write this characters background")

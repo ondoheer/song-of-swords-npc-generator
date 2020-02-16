@@ -184,8 +184,10 @@ class Character():
 
     @property
     def grit(self):
-        # TODO
         return self._wil // 2 + self._grit_mod
+
+    def set_grit(self, lvl):
+        self._grit_mod += lvl
 
     def set_campaign_power(self, power=None):
         """
