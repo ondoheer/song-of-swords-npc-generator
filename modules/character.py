@@ -68,6 +68,7 @@ class Character():
 
         # to be displayed if the master creates it
         self.background = ""
+
     def __str__(self):
 
         return f"""
@@ -653,12 +654,19 @@ class Character():
         Create a new NPC following the CC process
         """
         self.allocate_pcp()
-        self.allocate_attributes()
-        self.process_race_attrs()
-        self.allocate_boones_banes()
-        self.allocate_skills()
-        self.allocate_wealth()
-        self.allocate_spp()
+        steps = [
+
+
+            self.allocate_attributes,
+            self.process_race_attrs,
+            self.allocate_boones_banes,
+            self.allocate_skills,
+            self.allocate_wealth,
+            self.allocate_spp,
+        ]
+        random.shuffle(steps)
+        for step in steps:
+            step()
 
     def print_boones(self):
 
@@ -691,7 +699,6 @@ class Character():
 
     def add_background_story(self, background):
         self.background = background
-
 
     def get_pc(self):
         """
